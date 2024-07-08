@@ -100,6 +100,7 @@
 #![cfg_attr(feature = "nightly", feature(const_trait_impl))]
 #![cfg_attr(not(feature = "std"), no_std)]
 
+use core::cmp::Ordering;
 use core::fmt;
 use core::fmt::Write;
 use core::result::Result;
@@ -139,6 +140,19 @@ impl From<u32> for FourCC {
         ])
     }
 }
+impl PartialOrd for FourCC {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        // Implement comparison logic here, possibly using the inner FourCC value
+        // For example, if FourCC can be converted to something comparable:
+        self.to_string().partial_cmp(&other.to_string())
+    }
+}
+impl Ord for FourCC {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.to_string().cmp(&other.to_string())
+    }
+}
+
 // The macro is needed, because the `impl const` syntax doesn't exists on `stable`.
 #[cfg(not(feature = "nightly"))]
 macro_rules! from_fourcc_for_u32 {
