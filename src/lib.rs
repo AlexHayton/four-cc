@@ -104,6 +104,7 @@ use core::cmp::Ordering;
 use core::fmt;
 use core::fmt::Write;
 use core::result::Result;
+use core::str::FromStr;
 
 /// A _four-character-code_ value.
 ///
@@ -150,6 +151,17 @@ impl PartialOrd for FourCC {
 impl Ord for FourCC {
     fn cmp(&self, other: &Self) -> Ordering {
         self.to_string().cmp(&other.to_string())
+    }
+}
+impl FromStr for FourCC {
+    type Err = u32;
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        if s.len() != 4 {
+            return Err(s.len() as u32);
+        }
+        let mut buf = [0u8; 4];
+        buf.copy_from_slice(s.as_bytes());
+        Ok(FourCC(buf))
     }
 }
 
