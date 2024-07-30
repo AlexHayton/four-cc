@@ -247,14 +247,6 @@ impl<T> FromStrVisitor<T> {
 }
 
 #[cfg(feature = "serde")]
-impl core::str::FromStr for FourCC {
-    type Err = u32;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        Ok(s.as_bytes().into())
-    }
-}
-
-#[cfg(feature = "serde")]
 impl<'de, T> serde::de::Visitor<'de> for FromStrVisitor<T>
 where
     T: core::str::FromStr,
